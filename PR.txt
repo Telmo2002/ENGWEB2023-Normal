@@ -1,0 +1,71 @@
+Contar número de registos:
+db.plantas.countDocuments()
+
+Quantos registos de plantação se encontram na freguesia "São Domingos de Rana"?
+db.plantas.count({ Freguesia: "São Domingos de Rana", Espécie: { $ne: null } })
+
+Qual a lista de freguesias (ordenada alfabeticamente e sem repetições)?
+db.plantas.distinct("Freguesia").sort()
+
+Qual a distribuição dos registos por freguesia (quantos registos em cada freguesia)
+db.plantas.aggregate([
+  {
+    $group: {
+      _id: "$Freguesia",
+      count: { $sum: 1 }
+    }
+  },
+  {
+    $sort: {
+      count: -1
+    }
+  }
+])
+
+
+Qual a distribuição dos registos por espécie?
+db.plantas.aggregate([
+  {
+    $group: {
+      _id: "$Espécie",
+      count: { $sum: 1 }
+    }
+  },
+  {
+    $sort: {
+      count: -1
+    }
+  }
+])
+
+
+Base de dados
+Alterei primeiramente o campo Id para _id, de maneira a evitar que o mongo gerasse um novo
+para cada elemento do dataset.
+De seguida removi os espaços dos seguintes atributos, de maneira a colocar no ficheiro models
+os atributos iguais aos da base de dados no mongo:
+
+-Número de Registo;
+-Código de rua;
+-Nome Científico
+-DataPlantação;
+-DataActualização;
+-Número de Intervenções.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
